@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: ${PROJECT_NAME}-nginx
+    ports:
+      - '80:80'
+  redis:
+    build:
+      context: ./docker/redis
+    image: 'redis:alpine'
+    container_name: ${PROJECT_NAME}-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./docker/redis/data:/data
+  postgres:
+    build:
+      context: ./docker/postgresql
+    image: 'postgres:alpine'
+    container_name: ${PROJECT_NAME}-postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./docker/postgres/data:/var/lib/postgresql/data
+  
